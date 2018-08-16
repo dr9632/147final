@@ -73,18 +73,33 @@ play.prototype = {
 				
 				// Temp mods
 				style = {font: '21px Helvetica', fill: '#000'};
-				this.menuText[0] = game.add.text(this.menu.x+16, 108, 'Temperature Change', style);
+				this.menuText[10] = game.add.text(this.menu.x+16, 108, 'Temperature Change', style);
 
 				style = {font: '16px Helvetica', fill: '#000'};
-				this.menuText[10] = game.add.text(this.menu.x+36, 130, '[ - ]', style);
-				this.menuText[10].inputEnabled = true;
-				this.menuText[10].events.onInputUp.add(function() {this.temp--;}, critter);
-				this.menuText[11] = game.add.text(this.menu.x+64, 130, '[ + ]', style);
+				this.menuText[11] = game.add.text(this.menu.x+36, 130, '[ - ]', style);
 				this.menuText[11].inputEnabled = true;
-				this.menuText[11].events.onInputUp.add(function() {this.temp++;}, critter);
+				this.menuText[11].events.onInputUp.add(function() {this.temp--;}, critter);
+				this.menuText[12] = game.add.text(this.menu.x+64, 130, '[ + ]', style);
+				this.menuText[12].inputEnabled = true;
+				this.menuText[12].events.onInputUp.add(function() {this.temp++;}, critter);
+
+				// Evironment setting
+				style = {font: '21px Helvetica', fill: '#000'};
+				this.menuText[13] = game.add.text(this.menu.x+16, 160, 'Set Environment', style);
+
+				style = {font: '16px Helvetica', fill: '#000'};
+				this.menuText[14] = game.add.text(this.menu.x+36, 185, '[ Default ]', style);
+				this.menuText[14].inputEnabled = true;
+				this.menuText[14].events.onInputUp.add(function() {this.env = 0;}, critter);
+				this.menuText[15] = game.add.text(this.menu.x+108, 185, '[ Land ]', style);
+				this.menuText[15].inputEnabled = true;
+				this.menuText[15].events.onInputUp.add(function() {this.env = 1;}, critter);
+				this.menuText[16] = game.add.text(this.menu.x+165, 185, '[ Air ]', style);
+				this.menuText[16].inputEnabled = true;
+				this.menuText[16].events.onInputUp.add(function() {this.env = 2;}, critter);
 			}
 		}, this);
-
+		/*
 		game.input.onDown.add(function() {
 			if (this.configOpen) {
 				if (event.x - game.width/2 - 60 < game.width/2+60) {
@@ -95,6 +110,7 @@ play.prototype = {
 				}
 			}
 		}, this);
+		*/
 
 		// Tick down hunger and love number every 10 sec while running
 		game.timer = game.time.create(true);
@@ -144,7 +160,7 @@ play.prototype = {
 		let str;
 		if (critter.env == 0) str = "neutral";
 		else if (critter.env == 1) str = "land";
-		else if (critter.env == 2) str = "water";
+		else if (critter.env == 2) str = "air";
 		else str = "unknown";
 		game.debug.text('Env type: ' + str, 16, 132, 'yellow');
 		game.debug.text('Env temp: ' + critter.temp, 16, 148, 'yellow');

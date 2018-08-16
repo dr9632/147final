@@ -100,10 +100,11 @@ Critter.prototype.growUp = function() {
 				if (this.temp > 40)
 					temp_evoNo++;
 			}
-			if (gochiData.lv == 1)
+			if (gochiData.lv == 2)
 				gochiData.evo_mod = temp_evoNo;
-			if (gochiData.lv == 2) {
+			if (gochiData.lv == 3) {
 				this.evo_mod += temp_evoNo;
+				gochiData.evo_gene = [];
 				if (this.evo_mod < 0)
 					gochiData.evo_gene[0] = 'icy';
 				if (this.evo_mod > 0)
