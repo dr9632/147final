@@ -27,6 +27,8 @@ function Critter(game, key) {
 	// Warm or cold (netural = 20)
 	// Below 0 is too cold, over 40 is too hot (health drops)
 	this.temp = gochiData.temp;
+	// Temperature adaptation mod number
+	this.modNum = 0;
 }
 
 // Set prototype
