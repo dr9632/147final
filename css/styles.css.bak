@@ -3,5 +3,5 @@ body {
 }
 
 game {
-	width: 100%;
+	width: 700px;
 }
