@@ -88,7 +88,7 @@ Critter.prototype.growUp = function() {
 			temp: this.temp
 		}
 
-		if (gochiData.lv == 1 || gochiData.lv == 2) {
+		if (gochiData.lv == 2 || gochiData.lv == 3) {
 			let temp_evoNo = 0;
 			if (this.temp < 15) {
 				temp_evoNo--;
