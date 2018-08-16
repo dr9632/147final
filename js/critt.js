@@ -1,18 +1,21 @@
 // Constructor
-function Critter(game, key, lv) {
+function Critter(game, key) {
 	Phaser.Sprite.call(this, game, game.width/2, game.height/2, key);
 	game.physics.enable(this);
 	this.body.collideWorldBounds = true;
 	this.animations.add('idle', [0, 1], 1, true);
 	this.animations.play('idle');
 
-	this.lv = lv;
+	this.lv = gochiData.lv;
 	// Default color is white
 	this.color = 0xffffff;
 	this.tint = this.color;
-	this.age = 0;
-	this.hunger = 100;
-	this.love = 100;
+	// Get current time (when prefab is called) and calculate diff w/ initialized time
+	let curr = new Date()
+	this.age = curr.getTime() - gochiData.init_time;
+
+	this.hunger = gochiData.hunger;
+	this.love = gochiData.love;
 	
 	// Envrironment setting
 	// Default: 0
@@ -29,6 +32,8 @@ Critter.prototype.constructor = Critter;
 
 // Prefab class functions
 Critter.prototype.update = function() {
+	// Update elapsed time
+	this.age = new Date() - gochiData.init_time;
 }
 
 Critter.prototype.tintvar = function() {
@@ -41,4 +46,8 @@ Critter.prototype.tintvar = function() {
 		t_color = 0x000000;
 
 	return this.color - t_color;
+}
+
+Critter.prototype.feed = function() {
+	this.hunger += 10;
 }

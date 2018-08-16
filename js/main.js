@@ -6,11 +6,11 @@ var pixbit = 6;
 
 // Game elements
 var env, pixColor;
-var critter;
+var critter, gochiData;
 
 window.onload = function() {
 	// Define game
-	game = new Phaser.Game(700, 800, Phaser.AUTO, 'game');
+	game = new Phaser.Game(700, 500, Phaser.AUTO, 'game');
 
 	// Define states
 	game.state.add('boot', boot);
