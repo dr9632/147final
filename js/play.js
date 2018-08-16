@@ -11,11 +11,11 @@ play.prototype = {
 		// Set game not to pause while running
 		game.stage.disableVisibilityChange = true;
 		game.add.existing(critter);
-		this.foodVal = 0x000001;
+		this.foodVal = 0x000000;
 
 		// Placing buttons
-		this.feed = game.add.button(game.width/2-52, game.height/2+64, 'feed', function(){critter.hunger += 10; critter.feed(this.foodVal);}, this);
-		this.pet = game.add.button(game.width/2-16, game.height/2+64, 'pet', function(){critter.love += 10;});
+		this.feed = game.add.button(game.width/2-52, game.height/2+64, 'feed', function(){critter.feed(this.foodVal); critter.hunger += 10;}, this);
+		this.pet = game.add.button(game.width/2-16, game.height/2+64, 'pet', function(){critter.pet(); critter.love += 10;}, this);
 		this.config = game.add.button(game.width/2+20, game.height/2+64, 'config', function(){
 			if (!this.configOpen) {
 				console.log("config menu opened. click anywhere to close");
@@ -31,14 +31,39 @@ play.prototype = {
 				this.menu.alpha = 0.7;
 				g.destroy();
 				
-				let style = {font: '16px Helvetica', fill: '#000'};
-				this.menuText[0] = game.add.text(this.menu.x+16, 12, 'Envrionment Change', style);
+				let style = {font: '21px Helvetica', fill: '#000'};
+				this.menuText[0] = game.add.text(this.menu.x+16, 12, 'Food Palette Change', style);
+
+				style = {font: '16px Helvetica', fill: '#000'};
+				this.menuText[1] = game.add.text(this.menu.x+16, 36, 'R', style);
+				this.menuText[2] = game.add.text(this.menu.x+36, 36, '[ - ]', style);
+				this.menuText[2].inputEnabled = true;
+				this.menuText[2].events.onInputUp.add(function() {this.foodVal = this.modFoodVal(-1, 0, 0)}, this);
+				this.menuText[3] = game.add.text(this.menu.x+64, 36, '[ + ]', style);
+				this.menuText[3].inputEnabled = true;
+				this.menuText[3].events.onInputUp.add(function() {this.foodVal = this.modFoodVal(1, 0, 0)}, this);
+				
+				this.menuText[4] = game.add.text(this.menu.x+16, 52, 'G', style);
+				this.menuText[5] = game.add.text(this.menu.x+36, 52, '[ - ]', style);
+				this.menuText[5].inputEnabled = true;
+				this.menuText[5].events.onInputUp.add(function() {this.foodVal = this.modFoodVal(0, -1, 0)}, this);
+				this.menuText[6] = game.add.text(this.menu.x+64, 52, '[ + ]', style);
+				this.menuText[6].inputEnabled = true;
+				this.menuText[6].events.onInputUp.add(function() {this.foodVal = this.modFoodVal(0, 1, 0)}, this);
+				
+				this.menuText[7] = game.add.text(this.menu.x+16, 70, 'B', style);
+				this.menuText[8] = game.add.text(this.menu.x+36, 70, '[ - ]', style);
+				this.menuText[8].inputEnabled = true;
+				this.menuText[8].events.onInputUp.add(function() {this.foodVal = this.modFoodVal(0, 0, -1)}, this);
+				this.menuText[9] = game.add.text(this.menu.x+64, 70, '[ + ]', style);
+				this.menuText[9].inputEnabled = true;
+				this.menuText[9].events.onInputUp.add(function() {this.foodVal = this.modFoodVal(0, 0, 1)}, this);
 			}
 		}, this);
 
 		game.input.onDown.add(function() {
 			if (this.configOpen) {
-				if (event.x > game.width/2+60) {
+				if (event.x - game.width/2 - 60 < game.width/2+60) {
 					this.menu.destroy();
 					for (let i = 0; i < this.menuText.length; i++)
 						this.menuText[i].destroy();
@@ -52,23 +77,26 @@ play.prototype = {
 		game.timer.loop(5000, function() {this.hunger--; this.love--;}, critter);
 		game.timer.start();
 	},
-	createMenuObj: function() {
-		let obj = null;
+	modFoodVal: function(r, g, b) {
+		let col = Phaser.Color.hexToRGBArray(this.foodVal);
+
+		// Modify RGB
+		col[0] = col[0] * 255 + r;
+		col[1] = col[1] * 255 + g;
+		col[2] = col[2] * 255 + b;
+
+		for (let i = 0; i < 3; i++) {
+			if (col[i] > 255)
+				col[i] = 255;
+			if (col[i] < 0)
+				col[i] = 0;
+
+			col[i] = col[i]/255;
+		}
 		
-		// create primitive
-		let g = game.add.graphics();
-		g.beginFill(0xffffff);
-		g.drawRect(game.width/2+50, 16, game.width-(game.width/2+50), game.height-16);
-		g.endFill();
+		col = Phaser.Color.RGBArrayToHex(col);
 
-		// transform primitive into sprite and destroy primitive
-		obj = game.add.sprite(game.width/2+50, 16, g.generateTexture());
-		//obj.alpha = 0.7;
-		g.destroy();
-
-		console.log("destroy and return");
-
-		return obj;
+		return col;
 	},
 	update: function() {
 	},
@@ -78,8 +106,9 @@ play.prototype = {
 		game.debug.text('critter hunger: ' + Math.floor(critter.hunger), 16, 48, 'yellow');
 		game.debug.text('critter love: ' + Math.floor(critter.love), 16, 64, 'yellow');
 		game.debug.text('critter color: ' + critter.color.toString(16), 16, 80, 'yellow');
+		game.debug.text('critter growth: ' + critter.growth, 16, 96, 'yellow');
 		
-		//game.debug.text('' + Phaser.Color.hexToRGBArray(0xfffffe), 16, 128, 'yellow');
+		game.debug.text('foodVal: ' + this.foodVal.toString(16), 16, 128, 'yellow');
 		//game.debug.text('' + Phaser.Color.RGBArrayToHex(this.er).toString(16), 16, 144, 'yellow');
 	}
 }

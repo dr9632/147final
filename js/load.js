@@ -18,6 +18,7 @@ load.prototype = {
 		// Sprites
 		game.load.spritesheet('egg', 'egg.png', 15, 14);
 		game.load.spritesheet('bb', 'bb.png', 15, 14);
+		game.load.image('rip', 'rip.png');
 		game.load.image('pix', 'fragment.png');
 		// Sound
 		game.load.path = 'assets/audio/';
@@ -34,18 +35,15 @@ load.prototype = {
 			gochiData = {
 				lv: 0,
 				growth: 0,
+				color: 0xffffff,
 				init_time: curr.getTime(),
 				hunger: 100,
 				love: 100
 			}
 			localStorage.setItem('gochiData', JSON.stringify(gochiData));
 		}
-		
-		// Initialize critter based on level from local data
-		if (gochiData.lv == 0)
-			critter = new Critter(game, 'egg');
-		if (gochiData.lv == 1)
-			critter = new Critter(game, 'bb');
+
+		critterInit();
 
 		game.state.start('menu');
 	}

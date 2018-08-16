@@ -17,6 +17,15 @@ window.onload = function() {
 	game.state.add('load', load);
 	game.state.add('menu', menu);
 	game.state.add('play', play);
+	game.state.add('gameover', gameover);
 	// Start state
 	game.state.start('boot');
+}
+
+function critterInit() {
+	// Initialize critter based on level from local data
+	if (gochiData.lv == 0)
+		critter = new Critter(game, 'egg');
+	if (gochiData.lv == 1)
+		critter = new Critter(game, 'bb');
 }

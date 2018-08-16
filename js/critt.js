@@ -7,12 +7,13 @@ function Critter(game, key) {
 	this.animations.play('idle');
 
 	this.lv = gochiData.lv;
+	this.health = 100;
 	this.growth = gochiData.growth;
 	// Default color is white
-	this.color = 0xffffff;
+	this.color = gochiData.color;
 	this.tint = this.color;
 	// Get current time (when prefab is called) and calculate diff w/ initialized time
-	let curr = new Date()
+	let curr = new Date();
 	this.age = curr.getTime() - gochiData.init_time;
 
 	this.hunger = gochiData.hunger;
@@ -23,8 +24,8 @@ function Critter(game, key) {
 	// Land: 1
 	// Air: 2
 	this.env = 0;
-	// Warm or cold (netural = 50)
-	this.temp = 50;
+	// Warm or cold (netural = 20)
+	this.temp = 20;
 }
 
 // Set prototype
@@ -33,6 +34,10 @@ Critter.prototype.constructor = Critter;
 
 // Prefab class functions
 Critter.prototype.update = function() {
+	// Check if critter is still alive
+	this.isAlive();
+	this.growUp();
+
 	// Update elapsed time
 	this.age = new Date() - gochiData.init_time;
 
@@ -40,6 +45,32 @@ Critter.prototype.update = function() {
 		this.hunger = 100;
 	if (this.love > 100)
 		this.love = 100;
+}
+
+Critter.prototype.isAlive = function() {
+	if (this.hunger < 0 || this.love < 0)
+		game.state.start('gameover');
+}
+
+Critter.prototype.growUp = function() {
+	if (this.age/3600000 > this.lv * 2 + 1)
+		this.growth += 1;
+	if (this.growth >= 100) {
+		let curr = new Date();
+		gochiData = {
+			lv: this.lv + 1,
+			growth: 0,
+			color: this.color,
+			init_time: curr.getTime(),
+			hunger: this.hunger,
+			love: this.love
+		}
+		localStorage.setItem('gochiData', JSON.stringify(gochiData));
+
+		this.destroy();
+		critterInit();
+		game.add.existing(critter);
+	}
 }
 
 Critter.prototype.tintvar = function() {
@@ -55,6 +86,7 @@ Critter.prototype.tintvar = function() {
 }
 
 Critter.prototype.feed = function(co_mod) {
+	this.health += 10;
 	if (this.love > 50) {
 		if (this.color + co_mod > 0xffffff)
 			this.color = 0xffffff;
@@ -66,5 +98,21 @@ Critter.prototype.feed = function(co_mod) {
 			this.color = 0x000000;
 		else
 			this.color -= co_mod;
+	}
+
+	if (this.hunger < 90) {
+		if (this.lv == 0)
+			this.growth += 5;
+		else
+			this.growth += Math.ceil(5/this.lv);
+	}
+}
+
+Critter.prototype.pet = function() {
+	if (this.love < 70) {
+		if (this.lv == 0)
+			this.growth += 10;
+		else
+			this.growth += Math.ceil(10/this.lv);
 	}
 }
