@@ -1,7 +1,7 @@
 var play = function(game) {
 	this.feed, this.foodVal;
 	this.pet, this.config;
-	this.menu;
+	this.menu, this.menuClose;
 	this.menuText = [];
 	this.configOpen = false;
 };
@@ -30,9 +30,20 @@ play.prototype = {
 				this.menu = game.add.sprite(game.width/2+60, 0, g.generateTexture());
 				this.menu.alpha = 0.7;
 				g.destroy();
+
+				// Close button
+				let style = {font: '21px Helvetica', fill: '#000'};
+				this.menuClose = game.add.text(game.width-42, 12, '[ X ]', style);
+				this.menuClose.inputEnabled = true;
+				this.menuClose.events.onInputUp.add(function() {
+					this.menu.destroy();
+					for (let i = 0; i < this.menuText.length; i++)
+						this.menuText[i].destroy();
+					this.configOpen = false;
+					this.menuClose.destroy();
+				}, this);
 				
 				// Food mods
-				let style = {font: '21px Helvetica', fill: '#000'};
 				this.menuText[0] = game.add.text(this.menu.x+16, 12, 'Food Palette Change', style);
 
 				style = {font: '16px Helvetica', fill: '#000'};
