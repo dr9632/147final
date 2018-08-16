@@ -27,6 +27,7 @@ function critterInit() {
 		critter = new Critter(game, 'egg');
 	if (gochiData.lv == 1 || gochiData.lv == 2)
 		critter = new Critter(game, 'bb');
+
 	if (gochiData.lv > 2 && gochiData.lv < 6) {
 		if (gochiData.evo_mod < 0)
 			critter = new Critter(game, 'furry');

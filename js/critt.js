@@ -11,6 +11,7 @@ function Critter(game, key) {
 	else if (this.lv < 7)
 		this.animations.add('idle', [0, 1, 0, 2], 1, true);
 	this.animations.play('idle');
+
 	this.health = gochiData.health;
 	this.growth = gochiData.growth;
 	// Default color is white
@@ -86,6 +87,7 @@ Critter.prototype.growUp = function() {
 			env: this.env,
 			temp: this.temp
 		}
+
 		if (gochiData.lv == 1 || gochiData.lv == 2) {
 			let temp_evoNo = 0;
 			if (this.temp < 15) {
@@ -110,6 +112,7 @@ Critter.prototype.growUp = function() {
 					gochiData.evo_gene[0] = 'mid';
 			}
 		}
+
 		localStorage.setItem('gochiData', JSON.stringify(gochiData));
 
 		critterInit();
