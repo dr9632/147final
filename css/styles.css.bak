@@ -1,7 +1,0 @@
-body {
-	font-family: Helvetica;
-}
-
-game {
-	width: 700px;
-}

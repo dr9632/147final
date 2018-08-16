@@ -7,7 +7,7 @@ function Critter(game, key) {
 	this.animations.play('idle');
 
 	this.lv = gochiData.lv;
-	this.health = 100;
+	this.health = gochiData.health;
 	this.growth = gochiData.growth;
 	// Default color is white
 	this.color = gochiData.color;
@@ -23,9 +23,10 @@ function Critter(game, key) {
 	// Default: 0
 	// Land: 1
 	// Air: 2
-	this.env = 0;
+	this.env = gochiData.env;
 	// Warm or cold (netural = 20)
-	this.temp = 20;
+	// Below 0 is too cold, over 40 is too hot (health drops)
+	this.temp = gochiData.temp;
 }
 
 // Set prototype
@@ -40,15 +41,22 @@ Critter.prototype.update = function() {
 
 	// Update elapsed time
 	this.age = new Date() - gochiData.init_time;
-
+	
+	// Capping stuff
 	if (this.hunger > 100)
 		this.hunger = 100;
 	if (this.love > 100)
 		this.love = 100;
+	if (this.health > 100)
+		this.health = 100;
+}
+
+Critter.prototype.hecticTemp = function() {
+	return this.temp > -20 && this.temp < 60;
 }
 
 Critter.prototype.isAlive = function() {
-	if (this.hunger < 0 || this.love < 0)
+	if (this.hunger < 0 || this.love < 0 || this.health < 0 || !this.hecticTemp())
 		game.state.start('gameover');
 }
 
@@ -60,14 +68,16 @@ Critter.prototype.growUp = function() {
 		gochiData = {
 			lv: this.lv + 1,
 			growth: 0,
+			health: this.health,
 			color: this.color,
 			init_time: curr.getTime(),
 			hunger: this.hunger,
-			love: this.love
+			love: this.love,
+			env: this.env,
+			temp: this.temp
 		}
 		localStorage.setItem('gochiData', JSON.stringify(gochiData));
 
-		this.destroy();
 		critterInit();
 		game.add.existing(critter);
 	}
@@ -75,14 +85,14 @@ Critter.prototype.growUp = function() {
 
 Critter.prototype.tintvar = function() {
 	let t_color;
-	if (this.temp < 50)
-		t_color = 0x222200;
-	else if (this.temp > 50)
-		t_color = 0x002222;
+	if (this.temp < 15)
+		t_color = 0x010100;
+	else if (this.temp > 25)
+		t_color = 0x000101;
 	else
 		t_color = 0x000000;
 
-	return this.color - t_color;
+	this.color -= t_color;
 }
 
 Critter.prototype.feed = function(co_mod) {

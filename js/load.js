@@ -35,10 +35,13 @@ load.prototype = {
 			gochiData = {
 				lv: 0,
 				growth: 0,
+				health: 100,
 				color: 0xffffff,
 				init_time: curr.getTime(),
 				hunger: 100,
-				love: 100
+				love: 100,
+				env: 0,
+				temp: 20
 			}
 			localStorage.setItem('gochiData', JSON.stringify(gochiData));
 		}

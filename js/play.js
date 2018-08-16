@@ -31,6 +31,7 @@ play.prototype = {
 				this.menu.alpha = 0.7;
 				g.destroy();
 				
+				// Food mods
 				let style = {font: '21px Helvetica', fill: '#000'};
 				this.menuText[0] = game.add.text(this.menu.x+16, 12, 'Food Palette Change', style);
 
@@ -58,6 +59,18 @@ play.prototype = {
 				this.menuText[9] = game.add.text(this.menu.x+64, 70, '[ + ]', style);
 				this.menuText[9].inputEnabled = true;
 				this.menuText[9].events.onInputUp.add(function() {this.foodVal = this.modFoodVal(0, 0, 1)}, this);
+				
+				// Temp mods
+				style = {font: '21px Helvetica', fill: '#000'};
+				this.menuText[0] = game.add.text(this.menu.x+16, 108, 'Temperature Change', style);
+
+				style = {font: '16px Helvetica', fill: '#000'};
+				this.menuText[10] = game.add.text(this.menu.x+36, 130, '[ - ]', style);
+				this.menuText[10].inputEnabled = true;
+				this.menuText[10].events.onInputUp.add(function() {this.temp--;}, critter);
+				this.menuText[11] = game.add.text(this.menu.x+64, 130, '[ + ]', style);
+				this.menuText[11].inputEnabled = true;
+				this.menuText[11].events.onInputUp.add(function() {this.temp++;}, critter);
 			}
 		}, this);
 
@@ -74,7 +87,14 @@ play.prototype = {
 
 		// Tick down hunger and love number every 10 sec while running
 		game.timer = game.time.create(true);
-		game.timer.loop(5000, function() {this.hunger--; this.love--;}, critter);
+		game.timer.loop(5000, function() {
+			this.hunger--;
+			this.love--;
+			if (this.temp < 0 || this.temp > 40)
+				this.health -= 3;
+			this.tintvar();
+			updateCache();
+		}, critter);
 		game.timer.start();
 	},
 	modFoodVal: function(r, g, b) {
@@ -105,10 +125,19 @@ play.prototype = {
 		game.debug.text('critter age: ' + Math.floor(critter.age/60000), 16, 32, 'yellow');
 		game.debug.text('critter hunger: ' + Math.floor(critter.hunger), 16, 48, 'yellow');
 		game.debug.text('critter love: ' + Math.floor(critter.love), 16, 64, 'yellow');
-		game.debug.text('critter color: ' + critter.color.toString(16), 16, 80, 'yellow');
-		game.debug.text('critter growth: ' + critter.growth, 16, 96, 'yellow');
+		game.debug.text('critter health: ' + Math.floor(critter.health), 16, 80, 'yellow');
+		game.debug.text('critter color: ' + critter.color.toString(16), 16, 96, 'yellow');
+		game.debug.text('critter growth: ' + critter.growth, 16, 112, 'yellow');
 		
-		game.debug.text('foodVal: ' + this.foodVal.toString(16), 16, 128, 'yellow');
+		let str;
+		if (critter.env == 0) str = "neutral";
+		else if (critter.env == 1) str = "land";
+		else if (critter.env == 2) str = "water";
+		else str = "unknown";
+		game.debug.text('Env type: ' + str, 16, 132, 'yellow');
+		game.debug.text('Env temp: ' + critter.temp, 16, 148, 'yellow');
+		
+		game.debug.text('foodVal: ' + this.foodVal.toString(16), 16, 216, 'yellow');
 		//game.debug.text('' + Phaser.Color.RGBArrayToHex(this.er).toString(16), 16, 144, 'yellow');
 	}
 }
