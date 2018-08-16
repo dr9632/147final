@@ -7,6 +7,7 @@ function Critter(game, key) {
 	this.animations.play('idle');
 
 	this.lv = gochiData.lv;
+	this.growth = gochiData.growth;
 	// Default color is white
 	this.color = 0xffffff;
 	this.tint = this.color;
@@ -34,6 +35,11 @@ Critter.prototype.constructor = Critter;
 Critter.prototype.update = function() {
 	// Update elapsed time
 	this.age = new Date() - gochiData.init_time;
+
+	if (this.hunger > 100)
+		this.hunger = 100;
+	if (this.love > 100)
+		this.love = 100;
 }
 
 Critter.prototype.tintvar = function() {
@@ -48,6 +54,17 @@ Critter.prototype.tintvar = function() {
 	return this.color - t_color;
 }
 
-Critter.prototype.feed = function() {
-	this.hunger += 10;
+Critter.prototype.feed = function(co_mod) {
+	if (this.love > 50) {
+		if (this.color + co_mod > 0xffffff)
+			this.color = 0xffffff;
+		else
+			this.color += co_mod;
+	}
+	else {
+		if (this.color - co_mod < 0x000000)
+			this.color = 0x000000;
+		else
+			this.color -= co_mod;
+	}
 }

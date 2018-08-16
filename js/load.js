@@ -33,6 +33,7 @@ load.prototype = {
 			let curr = new Date();
 			gochiData = {
 				lv: 0,
+				growth: 0,
 				init_time: curr.getTime(),
 				hunger: 100,
 				love: 100
