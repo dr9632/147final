@@ -9,7 +9,7 @@ function Critter(game, key) {
 	// Animation setting
 	if (this.lv < 3)
 		this.animations.add('idle', [0, 1], 1, true);
-	else if (this.lv < 7)
+	else
 		this.animations.add('idle', [0, 1, 0, 2], 1, true);
 	this.animations.play('idle');
 
@@ -122,13 +122,13 @@ Critter.prototype.growUp = function() {
 				gochiData.evo_mod--;
 			if (this.env == 2)
 				gochiData.evo_mod++;
-			if (gochiData.lv == 7) {
-				if (gochiDataEvo < 1)
-					gochiData.evo_gene[1] = "land";
-				else if (gochiDataEvo > 1)
-					gochiData.evo_gene[1] = "air";
+			if (gochiData.lv == 6) {
+				if (gochiData.evo_mod < 1)
+					gochiData.evo_gene[1] = 'land';
+				else if (gochiData.evo_mod > 1)
+					gochiData.evo_gene[1] = 'air';
 				else
-					gochiData.evo_gene[1] = "mid";
+					gochiData.evo_gene[1] = 'mid';
 			}
 		}
 

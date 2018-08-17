@@ -52,24 +52,7 @@ load.prototype = {
 		}
 
 		critterInit();
-		critter_append = game.add.group();
 		
-		let appended;
-		if (critter.lv > 5) {
-			let key;
-			if (gochiData.evo_gene[1] == "land")
-				key = 'feet';
-			else if (gochiData.evo_gene[1] == "air")
-				key = 'wing';
-			else
-				key = 'spark';
-
-			appended = critter_append.create(critter.body.x, critter.body.y, key);
-			appended.anchor.set(0.5);
-			appended.animations.add('idle', [0, 1], 1, true);
-			appended.animations.play('idle');
-		}
-
 		game.state.start('menu');
 	}
 }

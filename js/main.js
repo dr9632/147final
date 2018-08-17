@@ -6,7 +6,8 @@ var bgcolor;
 // Game elements
 var env, pixColor;
 var gochiData;
-var critter, critter_append;
+var critter;
+var critter_append = [];
 
 window.onload = function() {
 	// Define game
@@ -29,7 +30,7 @@ function critterInit() {
 	if (gochiData.lv == 1 || gochiData.lv == 2)
 		critter = new Critter(game, 'bb');
 
-	if (gochiData.lv > 2 && gochiData.lv < 6) {
+	if (gochiData.lv > 2) {
 		if (gochiData.evo_gene[0] == "icy")
 			critter = new Critter(game, 'furry');
 		else if (gochiData.evo_gene[0] == "fiery")
@@ -37,9 +38,6 @@ function critterInit() {
 		else
 			critter = new Critter(game, 'newt');
 	}
-	/*
-	lv 6~10: environment adaptation (even more sprtieseafada
-	*/
 }
 
 function updateCache() {

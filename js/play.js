@@ -10,6 +10,22 @@ play.prototype = {
 	create: function() {
 		// Set game not to pause while running
 		game.stage.disableVisibilityChange = true;
+		// Place append asset if available
+		if (gochiData.lv > 5) {
+			let key;
+			if (gochiData.evo_gene[1] == "land")
+				key = 'feet';
+			else if (gochiData.evo_gene[1] == "air")
+				key = 'wing';
+			else
+				key = 'spark';
+
+			critter_append[0] = game.add.sprite(critter.body.x, critter.body.y, key);
+			critter_append[0].anchor.set(0.5);
+			critter_append[0].animations.add('ap_idle', [0, 1], 1, true);
+			critter_append[0].animations.play('ap_idle');
+			critter_append[0].tint = critter.color;
+		}
 		game.add.existing(critter);
 		this.foodVal = 0x000000;
 
