@@ -38,6 +38,7 @@ function Critter(game, key) {
 	// Evolution modification number
 	if (gochiData.evo_mod != null)
 		this.evo_mod = gochiData.evo_mod;
+	this.evo_gene = gochiData.evo_gene;
 }
 
 // Set prototype
@@ -85,11 +86,13 @@ Critter.prototype.growUp = function() {
 			hunger: this.hunger,
 			love: this.love,
 			env: this.env,
-			temp: this.temp
+			temp: this.temp,
+			evo_gene: this.evo_gene
 		}
 		if (gochiData.lv > 0 && gochiData.lv < 4) {
 			let temp_evoNo = 0;
-			if (gochiData.evo_mod == null) gochiData.evo_mod = 0;
+			if (gochiData.evo_mod == null && this.evo_mod == null) gochiData.evo_mod = 0;
+			if (this.evo_mod != null) gochiData.evo_mod = this.evo_mod;
 			if (this.temp < 15) {
 				temp_evoNo--;
 				if (this.temp < 0)
@@ -101,9 +104,8 @@ Critter.prototype.growUp = function() {
 					temp_evoNo++;
 			}
 			gochiData.evo_mod += temp_evoNo;
-		}
+		
 			if (gochiData.lv == 3) {
-				gochiData.evo_gene = [];
 				if (gochiData.evo_mod < 0)
 					gochiData.evo_gene[0] = 'icy';
 				else if (gochiData.evo_mod > 0)
@@ -113,11 +115,20 @@ Critter.prototype.growUp = function() {
 			}
 		}
 		if (gochiData.lv > 3 && gochiData.lv < 8){
-			if (gochiData.evo_mod == null) gochiData.evo_mod = 0;
+			if (gochiData.evo_mod == null && this.evo_mod == null) gochiData.evo_mod = 0;
+			if (this.evo_mod != null) gochiData.evo_mod = this.evo_mod;
 			if (this.env == 1)
 				gochiData.evo_mod--;
 			if (this.env == 2)
 				gochiData.evo_mod++;
+			if (gochiData.lv == 7) {
+				if (gochiDataEvo < 1)
+					gochiData.evo_gene[1] = "land";
+				else if (gochiDataEvo > 1)
+					gochiData.evo_gene[1] = "air";
+				else
+					gochiData.evo_gene[1] = "mid";
+			}
 		}
 
 		localStorage.setItem('gochiData', JSON.stringify(gochiData));

@@ -44,7 +44,8 @@ load.prototype = {
 				hunger: 100,
 				love: 100,
 				env: 0,
-				temp: 20
+				temp: 20,
+				evo_gene: []
 			}
 			localStorage.setItem('gochiData', JSON.stringify(gochiData));
 		}
