@@ -3,6 +3,7 @@ function Critter(game, key) {
 	Phaser.Sprite.call(this, game, game.width/2, game.height/2, key);
 	game.physics.enable(this);
 	this.body.collideWorldBounds = true;
+	this.anchor.set(0.5);
 
 	this.lv = gochiData.lv;
 	// Animation setting

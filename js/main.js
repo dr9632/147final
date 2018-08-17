@@ -5,7 +5,8 @@ var bgcolor;
 
 // Game elements
 var env, pixColor;
-var critter, gochiData;
+var gochiData;
+var critter, critter_append;
 
 window.onload = function() {
 	// Define game
