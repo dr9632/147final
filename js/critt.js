@@ -87,9 +87,9 @@ Critter.prototype.growUp = function() {
 			env: this.env,
 			temp: this.temp
 		}
-
-		if (gochiData.lv == 2 || gochiData.lv == 3) {
-			let temp_evoNo = 0;
+		if (gochiData.lv > 0 && gochiData.lv < 4) {
+			var temp_evoNo = 0;
+			gochiData.evo_mod = 0;
 			if (this.temp < 15) {
 				temp_evoNo--;
 				if (this.temp < 0)
@@ -100,22 +100,21 @@ Critter.prototype.growUp = function() {
 				if (this.temp > 40)
 					temp_evoNo++;
 			}
-			if (gochiData.lv == 2)
-				gochiData.evo_mod = temp_evoNo;
-			if (gochiData.lv == 3) {
-				this.evo_mod += temp_evoNo;
-				gochiData.evo_gene = [];
-				if (this.evo_mod < 0)
-					gochiData.evo_gene[0] = 'icy';
-				if (this.evo_mod > 0)
-					gochiData.evo_gene[0] = 'hot';
-				else
-					gochiData.evo_gene[0] = 'mid';
-			}
+			gochiData.evo_mod += temp_evoNo;
+		}
+		if (gochiData.lv == 3) {
+			gochiData.evo_gene = [];
+			if (gochiData.evo_mod < 0)
+				gochiData.evo_gene[0] = 'icy';
+			else if (gochiData.evo_mod > 0)
+				gochiData.evo_gene[0] = 'hot';
+			else
+				gochiData.evo_gene[0] = 'mid';
 		}
 
 		localStorage.setItem('gochiData', JSON.stringify(gochiData));
-
+		
+		this.destroy();
 		critterInit();
 		game.add.existing(critter);
 	}
@@ -125,8 +124,12 @@ Critter.prototype.tintvar = function() {
 	let t_color;
 	if (this.temp < 15)
 		t_color = 0x010100;
+	else if (this.temp < 0)
+		t_color = 0x020200;
 	else if (this.temp > 25)
 		t_color = 0x000101;
+	else if (this.temp > 40)
+		t_color = 0x000202;
 	else
 		t_color = 0x000000;
 
