@@ -88,8 +88,8 @@ Critter.prototype.growUp = function() {
 			temp: this.temp
 		}
 		if (gochiData.lv > 0 && gochiData.lv < 4) {
-			var temp_evoNo = 0;
-			gochiData.evo_mod = 0;
+			let temp_evoNo = 0;
+			if (gochiData.evo_mod == null) gochiData.evo_mod = 0;
 			if (this.temp < 15) {
 				temp_evoNo--;
 				if (this.temp < 0)
@@ -102,21 +102,29 @@ Critter.prototype.growUp = function() {
 			}
 			gochiData.evo_mod += temp_evoNo;
 		}
-		if (gochiData.lv == 3) {
-			gochiData.evo_gene = [];
-			if (gochiData.evo_mod < 0)
-				gochiData.evo_gene[0] = 'icy';
-			else if (gochiData.evo_mod > 0)
-				gochiData.evo_gene[0] = 'hot';
-			else
-				gochiData.evo_gene[0] = 'mid';
+			if (gochiData.lv == 3) {
+				gochiData.evo_gene = [];
+				if (gochiData.evo_mod < 0)
+					gochiData.evo_gene[0] = 'icy';
+				else if (gochiData.evo_mod > 0)
+					gochiData.evo_gene[0] = 'hot';
+				else
+					gochiData.evo_gene[0] = 'mid';
+			}
+		}
+		if (gochiData.lv > 3 && gochiData.lv < 8){
+			if (gochiData.evo_mod == null) gochiData.evo_mod = 0;
+			if (this.env == 1)
+				gochiData.evo_mod--;
+			if (this.env == 2)
+				gochiData.evo_mod++;
 		}
 
 		localStorage.setItem('gochiData', JSON.stringify(gochiData));
 		
 		this.destroy();
 		critterInit();
-		game.add.existing(critter);
+		game.state.start('play');
 	}
 }
 
