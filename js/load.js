@@ -21,7 +21,9 @@ load.prototype = {
 		game.load.spritesheet('furry', 'furry.png', 20, 19);
 		game.load.spritesheet('newt', 'newt.png', 20, 19);
 		game.load.spritesheet('fiery', 'fiery.png', 20, 19);
+		game.load.spritesheet('feet', 'feet.png', 35, 19);
 		game.load.spritesheet('wing', 'wing.png', 35, 19);
+		game.load.spritesheet('spark', 'spark.png', 35, 19);
 		game.load.image('rip', 'rip.png');
 		game.load.image('pix', 'fragment.png');
 		// Sound
